@@ -6,6 +6,7 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -30,17 +31,36 @@ public class IndexController {
 		   
 		Optional<Usuario> usuario = usuarioRepository.findById(id);
 		   
-		   /*supondo que oretorno é um relatorio*/
+		   /*supondo que o retorno é um relatorio*/
 		return new ResponseEntity<Usuario>(usuario.get(), HttpStatus.OK);
 	}
        
-	  
+	   /*Serviço RESTful*/
 	  @GetMapping(value = "/", produces= "application/json")
 	  public ResponseEntity<List<Usuario>> usuario(){
 		  
 		    List<Usuario> list = (List<Usuario>) usuarioRepository.findAll();
 		    
 		    return new ResponseEntity<List<Usuario>>(list, HttpStatus.OK);
+	  }
+	  
+	  @DeleteMapping(value = "/{id}", produces = "aplication/text")
+	  public String delete (@PathVariable("id")Long id) {
+		  
+		  usuarioRepository.deleteById(id);
+		  
+		  return "ok";
+		  
+	  }
+		  
+		  @DeleteMapping(value = "/{id}/venda", produces = "aplication/text")
+		  public String deletevenda(@PathVariable("id")Long id) {
+			  
+			  usuarioRepository.deleteById(id); /*Iria deletar todas as vendas do usuario*/
+			   
+			  return "ok";
+			  
+		  
 	  }
 	  
 	   @PostMapping(value= "/", produces = "application/json")
@@ -60,6 +80,19 @@ public class IndexController {
 		   
 		   return new ResponseEntity<Usuario>(usuarioSalvo, HttpStatus.OK);
 	   }
+	   
+	   
+	   @PutMapping(value= "/{iduser}/idvenda/{idvenda}", produces = "application/json")
+	   public ResponseEntity updateVenda (@PathVariable Long iduser,
+			                                 @PathVariable Long idvenda){
+		   
+		   /*Aqui voçe pode colocar qualquer codico antes de salvar*/
+		   
+		  // Usuario usuarioSalvo = usuarioRepository.save(usuario);
+		   
+		   return new ResponseEntity("Venda atualizada", HttpStatus.OK);
+	   }
+	   
 	   
 	   
 	   
